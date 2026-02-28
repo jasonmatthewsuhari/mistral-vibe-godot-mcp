@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/chicken.svg" id="1_tex"]
+
+[node name="Main" type="Node2D"]
+
+[node name="Chicken" type="Sprite2D" parent="."]
+position = Vector2(256, 256)
+texture = ExtResource("1_tex")
+

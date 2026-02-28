@@ -1,0 +1,9 @@
+; Engine configuration file.
+; Minimal fixture for integration tests.
+
+config_version=5
+
+[application]
+config/name="Leader Fixture Project"
+run/main_scene="res://scenes/main.tscn"
+

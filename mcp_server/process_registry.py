@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import os
+import subprocess
 from collections import deque
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Literal
+from typing import IO, Literal
 from uuid import uuid4
 
 from .errors import MCPError
@@ -63,6 +65,38 @@ class OutputRingBuffer:
         return result, next_cursor
 
 
+class PopenAsyncAdapter:
+    """Async-compatible wrapper around subprocess.Popen for Windows fallback."""
+
+    def __init__(self, proc: subprocess.Popen[str]) -> None:
+        self._proc = proc
+
+    @property
+    def pid(self) -> int | None:
+        return self._proc.pid
+
+    @property
+    def returncode(self) -> int | None:
+        return self._proc.returncode
+
+    @property
+    def stdout(self) -> IO[str] | None:
+        return self._proc.stdout
+
+    @property
+    def stderr(self) -> IO[str] | None:
+        return self._proc.stderr
+
+    def terminate(self) -> None:
+        self._proc.terminate()
+
+    def kill(self) -> None:
+        self._proc.kill()
+
+    async def wait(self) -> int:
+        return await asyncio.to_thread(self._proc.wait)
+
+
 @dataclass(slots=True)
 class ProcessSession:
     """Session state for one Godot process."""
@@ -72,7 +106,7 @@ class ProcessSession:
     mode: Literal["editor", "run"]
     project_path: str
     started_at: str
-    process: asyncio.subprocess.Process
+    process: asyncio.subprocess.Process | PopenAsyncAdapter
     output: OutputRingBuffer = field(default_factory=OutputRingBuffer)
     exit_code: int | None = None
     stdout_task: asyncio.Task[None] | None = None
@@ -118,11 +152,16 @@ class ProcessRegistry:
             if scene_override:
                 args.extend(["--main-scene", scene_override])
 
-        process = await asyncio.create_subprocess_exec(
-            *args,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
-        )
+        process: asyncio.subprocess.Process | PopenAsyncAdapter
+        try:
+            process = await asyncio.create_subprocess_exec(
+                *args,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+            )
+        except PermissionError:
+            # Some Windows environments deny async pipe creation for child processes.
+            process = self._spawn_with_popen(args)
 
         session_id = str(uuid4())
         session = ProcessSession(
@@ -198,19 +237,38 @@ class ProcessRegistry:
         except MCPError:
             return None
 
+    def _spawn_with_popen(self, args: list[str]) -> PopenAsyncAdapter:
+        proc = subprocess.Popen(
+            args,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            stdin=subprocess.DEVNULL,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,
+        )
+        return PopenAsyncAdapter(proc)
+
     async def _read_stream(
         self,
         session: ProcessSession,
         stream_name: StreamName,
-        stream: asyncio.StreamReader | None,
+        stream: asyncio.StreamReader | IO[str] | None,
     ) -> None:
         if stream is None:
             return
         while True:
-            line = await stream.readline()
+            if isinstance(stream, asyncio.StreamReader):
+                line = await stream.readline()
+            else:
+                line = await asyncio.to_thread(stream.readline)
             if not line:
                 break
-            text = line.decode(errors="replace").rstrip("\r\n")
+            if isinstance(line, bytes):
+                text = line.decode(errors="replace").rstrip("\r\n")
+            else:
+                text = str(line).rstrip("\r\n")
             if text:
                 session.output.append(stream_name, text)
 
@@ -223,4 +281,3 @@ class ProcessRegistry:
                 task.cancel()
                 with contextlib.suppress(asyncio.CancelledError):
                     await task
-

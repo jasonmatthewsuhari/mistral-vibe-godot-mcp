@@ -1,0 +1,20 @@
+; Engine configuration file.
+; Minimal project fixture for opt-in integration tests.
+
+config_version=5
+
+[application]
+config/name="MCP Integration Fixture"
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.4")
+config/icon="res://icon.svg"
+
+[editor_plugins]
+enabled=PackedStringArray("res://addons/mistral_mcp_bridge/plugin.cfg")
+
+[autoload]
+MistralBridgeBootstrap="*res://mistral_bridge_bootstrap.gd"
+
+[mistral_mcp]
+bridge_token="integration-token"
+bridge_port=19110

@@ -1,0 +1,113 @@
+[gd_scene load_steps=12 format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_grass"]
+albedo_color = Color(0.227451, 0.658824, 0.266667, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_white"]
+albedo_color = Color(0.96, 0.96, 0.94, 1)
+roughness = 0.75
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_beak"]
+albedo_color = Color(0.984314, 0.67451, 0.14902, 1)
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_red"]
+albedo_color = Color(0.843137, 0.211765, 0.247059, 1)
+roughness = 0.8
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
+size = Vector2(36, 36)
+
+[sub_resource type="SphereMesh" id="SphereMesh_body"]
+radius = 1.05
+height = 2.1
+
+[sub_resource type="SphereMesh" id="SphereMesh_head"]
+radius = 0.52
+height = 1.04
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_beak"]
+top_radius = 0.0
+bottom_radius = 0.16
+height = 0.45
+
+[sub_resource type="SphereMesh" id="SphereMesh_comb"]
+radius = 0.16
+height = 0.32
+
+[sub_resource type="SphereMesh" id="SphereMesh_wing"]
+radius = 0.45
+height = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_leg"]
+top_radius = 0.06
+bottom_radius = 0.06
+height = 0.62
+
+[node name="Main3D" type="Node3D"]
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.9, 0.7, 0)
+light_energy = 1.4
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.996195, -0.0218149, 0.084186, 0, 0.968036, 0.250799, -0.0869682, -0.249845, 0.964353, 0, 5.4, 9.2)
+current = true
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_ground")
+surface_material_override/0 = SubResource("StandardMaterial3D_grass")
+
+[node name="Chicken" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0)
+
+[node name="Body" type="MeshInstance3D" parent="Chicken"]
+mesh = SubResource("SphereMesh_body")
+surface_material_override/0 = SubResource("StandardMaterial3D_white")
+
+[node name="Head" type="MeshInstance3D" parent="Chicken"]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0.95, 0.92)
+mesh = SubResource("SphereMesh_head")
+surface_material_override/0 = SubResource("StandardMaterial3D_white")
+
+[node name="Beak" type="MeshInstance3D" parent="Chicken"]
+transform = Transform3D(1, 0, 0, 0, 6.12323e-17, -1, 0, 1, 6.12323e-17, 0, 0.95, 1.42)
+mesh = SubResource("CylinderMesh_beak")
+surface_material_override/0 = SubResource("StandardMaterial3D_beak")
+
+[node name="CombA" type="MeshInstance3D" parent="Chicken"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, 1.44, 0.96)
+mesh = SubResource("SphereMesh_comb")
+surface_material_override/0 = SubResource("StandardMaterial3D_red")
+
+[node name="CombB" type="MeshInstance3D" parent="Chicken"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 1.0)
+mesh = SubResource("SphereMesh_comb")
+surface_material_override/0 = SubResource("StandardMaterial3D_red")
+
+[node name="CombC" type="MeshInstance3D" parent="Chicken"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, 1.43, 0.95)
+mesh = SubResource("SphereMesh_comb")
+surface_material_override/0 = SubResource("StandardMaterial3D_red")
+
+[node name="WingLeft" type="MeshInstance3D" parent="Chicken"]
+transform = Transform3D(0.85, 0, 0, 0, 0.7, 0, 0, 0, 0.55, -0.95, 0.2, 0.05)
+mesh = SubResource("SphereMesh_wing")
+surface_material_override/0 = SubResource("StandardMaterial3D_white")
+
+[node name="WingRight" type="MeshInstance3D" parent="Chicken"]
+transform = Transform3D(0.85, 0, 0, 0, 0.7, 0, 0, 0, 0.55, 0.95, 0.2, 0.05)
+mesh = SubResource("SphereMesh_wing")
+surface_material_override/0 = SubResource("StandardMaterial3D_white")
+
+[node name="LegLeft" type="MeshInstance3D" parent="Chicken"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34, -1.05, 0.15)
+mesh = SubResource("CylinderMesh_leg")
+surface_material_override/0 = SubResource("StandardMaterial3D_beak")
+
+[node name="LegRight" type="MeshInstance3D" parent="Chicken"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34, -1.05, 0.15)
+mesh = SubResource("CylinderMesh_leg")
+surface_material_override/0 = SubResource("StandardMaterial3D_beak")
