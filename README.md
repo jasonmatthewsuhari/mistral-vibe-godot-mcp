@@ -1,5 +1,8 @@
 # mistral-vibe-godot-mcp
-MCP server for Godot engine automation designed for Mistral Vibe workflows.
+
+MCP server for Godot engine automation designed for Mistral Vibe workflows.  
+
+https://github.com/user-attachments/assets/3b52def9-4663-4804-bb32-c7511511a422
 
 ## Mistral Vibe Positioning
 This project is explicitly designed as a **Mistral Vibe-native** developer tool:
