@@ -48,19 +48,19 @@
       "name": "scene_create",
       "required_args": [
         "project_path",
-        "scene_path",
-        "root_node_type"
+        "root_node_type",
+        "scene_path"
       ]
     },
     {
       "description": "Add a node to a scene through the local Godot addon bridge.",
       "name": "scene_add_node",
       "required_args": [
-        "project_path",
-        "scene_path",
-        "parent_node_path",
+        "node_name",
         "node_type",
-        "node_name"
+        "parent_node_path",
+        "project_path",
+        "scene_path"
       ]
     },
     {
@@ -77,9 +77,9 @@
       "description": "Export a mesh library through the local Godot addon bridge.",
       "name": "scene_export_mesh_library",
       "required_args": [
+        "mesh_library_path",
         "project_path",
-        "source_scene_path",
-        "mesh_library_path"
+        "source_scene_path"
       ]
     },
     {
@@ -116,9 +116,9 @@
       "description": "Send interaction input through the local addon bridge.",
       "name": "render_interact",
       "required_args": [
-        "project_path",
         "mode",
-        "payload"
+        "payload",
+        "project_path"
       ]
     }
   ]
