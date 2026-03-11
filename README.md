@@ -11,6 +11,10 @@ MCP server that lets AI agents automate the Godot 4 game engine — create scene
 - **Godot 4.4+** support via a lightweight GDScript addon bridge
 - **Localhost-only** with token auth — no network exposure
 
+## Agent Setup
+
+If you're an AI agent (or configuring one), see **[SETUP_AGENT.md](SETUP_AGENT.md)** for machine-readable setup instructions with all env vars, tool signatures, and troubleshooting.
+
 ## Quick Start
 
 ### 1. Install
