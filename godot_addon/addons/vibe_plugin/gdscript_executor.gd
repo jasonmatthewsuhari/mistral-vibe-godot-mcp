@@ -9,6 +9,9 @@ static func execute(code: String) -> Error:
 		push_error("Vibe: GDScript compile error: %s" % error_string(err))
 		return err
 	var instance = script.new()
+	if instance == null:
+		push_error("Vibe: GDScript instantiation failed")
+		return FAILED
 	if instance.has_method("run"):
 		instance.run()
 	return OK

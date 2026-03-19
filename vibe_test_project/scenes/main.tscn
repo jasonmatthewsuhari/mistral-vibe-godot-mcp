@@ -1,12 +1,9 @@
 [gd_scene format=3 uid="uid://dh8csgh55b4cs"]
 
-[node name="Main" type="Node2D" unique_id=1290629279]
+[node name="Main" type="Node2D"]
 
-[node name="0" type="Sprite2D" parent="." unique_id=1416740849]
+[node name="Player" type="Sprite2D" parent="."]
 
-[node name="1" type="Label" parent="." unique_id=1451641862]
-offset_left = 100.0
-offset_top = 100.0
-offset_right = 100.0
-offset_bottom = 100.0
+[node name="Label" type="Label" parent="."]
+position = Vector2(100, 100)
 text = "Vibe Plugin Test"
