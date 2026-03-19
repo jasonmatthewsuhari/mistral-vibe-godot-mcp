@@ -1,0 +1,9 @@
+[gd_scene load_steps=1 format=3 uid="uid://vibe_main"]
+
+[node name="Main" type="Node2D"]
+
+[node name="Player" type="Sprite2D" parent="."]
+
+[node name="Label" type="Label" parent="."]
+position = Vector2(100, 100)
+text = "Vibe Plugin Test"
