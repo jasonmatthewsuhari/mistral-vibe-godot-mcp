@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+*.egg
+
+# Environment secrets
+.env
+*.env.local
+
+# Godot
+.godot/
+*.uid
+*.import
+*.translation
+
+# Editor
+.vscode/
+.idea/
+*.swp
