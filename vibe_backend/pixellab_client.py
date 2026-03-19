@@ -14,7 +14,6 @@ _SIZE_RE = re.compile(r"\b(\d+)\s*(?:x|×|by)\s*(\d+)\b", re.IGNORECASE)
 
 
 def _extract_size(prompt: str) -> Tuple[dict, str]:
-    """Return (image_size dict, cleaned prompt). Falls back to DEFAULT_SIZE."""
     match = _SIZE_RE.search(prompt)
     if match:
         w, h = int(match.group(1)), int(match.group(2))
@@ -39,7 +38,7 @@ async def modify_image(prompt: str, image_b64: str, key: str) -> bytes:
     size, description = _extract_size(prompt)
     w, h = size["width"], size["height"]
 
-    # Resize init_image to match requested output dimensions (PixelLab requires them to match)
+    # PixelLab requires init_image to match output dimensions
     pil_img = PIL.Image.open(BytesIO(base64.b64decode(image_b64))).convert("RGBA")
     if pil_img.size != (w, h):
         pil_img = pil_img.resize((w, h), PIL.Image.LANCZOS)

@@ -10,7 +10,7 @@ Rules:
 5. After adding nodes: set node.owner = scene_root
 6. After file changes: get_editor_interface().get_resource_filesystem().scan()
 7. Save scene: get_editor_interface().save_scene()
-8. Output ONLY raw GDScript — no markdown fences, no explanation"""
+8. Output ONLY raw GDScript -- no markdown fences, no explanation"""
 
 # OpenAI-compatible providers
 _OPENAI_COMPAT = {

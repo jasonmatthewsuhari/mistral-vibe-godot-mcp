@@ -29,7 +29,7 @@ async def _validate_env() -> None:
         missing.append("OPENAI_API_KEY / MISTRAL_API_KEY / GEMINI_API_KEY")
     if missing:
         warnings.warn(
-            f"Vibe backend: missing env vars — {', '.join(missing)}. "
+            f"Vibe backend: missing env vars -- {', '.join(missing)}. "
             "Asset generation and automation will return 502 until keys are configured.",
             stacklevel=1,
         )
