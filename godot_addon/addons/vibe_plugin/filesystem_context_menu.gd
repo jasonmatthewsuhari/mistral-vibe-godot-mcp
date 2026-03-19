@@ -39,9 +39,11 @@ func _on_modify(res_path: String, abs_path: String) -> void:
 
 
 func _do_generate(prompt_text: String, abs_folder: String) -> void:
+	var loading := _show_loading("Generating asset...")
 	var helper: Node = VibeHTTPHelperScript.new()
 	EditorInterface.get_base_control().add_child(helper)
 	helper.request_completed.connect(func(ok: bool, body: Dictionary) -> void:
+		loading.queue_free()
 		if ok:
 			EditorInterface.get_resource_filesystem().scan()
 		else:
@@ -61,9 +63,11 @@ func _do_modify(prompt_text: String, res_path: String, abs_path: String) -> void
 		return
 	var b64 := Marshalls.raw_to_base64(raw_bytes)
 
+	var loading := _show_loading("Modifying asset...")
 	var helper: Node = VibeHTTPHelperScript.new()
 	EditorInterface.get_base_control().add_child(helper)
 	helper.request_completed.connect(func(ok: bool, body: Dictionary) -> void:
+		loading.queue_free()
 		if ok:
 			EditorInterface.get_resource_filesystem().scan()
 		else:
@@ -75,6 +79,16 @@ func _do_modify(prompt_text: String, res_path: String, abs_path: String) -> void
 		"file_path": abs_path,
 		"image_base64": b64,
 	})
+
+
+func _show_loading(message: String) -> AcceptDialog:
+	var dlg := AcceptDialog.new()
+	dlg.title = "Vibe Plugin"
+	dlg.dialog_text = message
+	dlg.get_ok_button().hide()
+	EditorInterface.get_base_control().add_child(dlg)
+	dlg.popup_centered()
+	return dlg
 
 
 func _show_error(message: String) -> void:
