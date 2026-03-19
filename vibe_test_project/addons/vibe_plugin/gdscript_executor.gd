@@ -11,5 +11,4 @@ static func execute(code: String) -> Error:
 	var instance = script.new()
 	if instance.has_method("run"):
 		instance.run()
-	instance.free()
 	return OK
