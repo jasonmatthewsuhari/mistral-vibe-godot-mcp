@@ -42,6 +42,8 @@ def _detect_provider() -> str:
 
 async def _call_openai_compat(provider: str, user_message: str) -> str:
     url, env_var, model = _OPENAI_COMPAT[provider]
+    if provider == "openai":
+        url = os.getenv("OPENAI_API_ENDPOINT") or url
     api_key = os.getenv(env_var)
     if not api_key:
         raise EnvironmentError(f"{env_var} is not set")
