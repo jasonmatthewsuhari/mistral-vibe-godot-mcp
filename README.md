@@ -14,30 +14,42 @@ A Godot 4 editor plugin for AI-assisted game development. Right-click assets and
 
 ## Setup
 
-### Backend
+### 1. Install Godot
+
+Download **Godot 4.3+** from [godotengine.org/download](https://godotengine.org/download/). The standard (non-Mono) build is all you need.
+
+### 2. Start the backend
 
 ```bash
 cd vibe_backend
+python -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-cp .env.example .env  # fill in your API keys
+cp .env.example .env        # then fill in your keys (see below)
 uvicorn main:app --port 8765
 ```
 
-Keys needed in `.env`:
-- `PIXELLAB_API_KEY` -- from [pixellab.ai](https://www.pixellab.ai/pixellab-api)
-- One of: `OPENAI_API_KEY`, `MISTRAL_API_KEY`, or `GEMINI_API_KEY`
+Keys in `.env`:
 
-Set `LLM_PROVIDER` to override auto-detection (`openai`, `mistral`, or `gemini`).
+| Variable | Required | Description |
+|---|---|---|
+| `PIXELLAB_API_KEY` | Yes | From [pixellab.ai](https://www.pixellab.ai/pixellab-api) |
+| `OPENAI_API_KEY` | One of these | OpenAI |
+| `MISTRAL_API_KEY` | One of these | Mistral |
+| `GEMINI_API_KEY` | One of these | Google Gemini |
+| `LLM_PROVIDER` | No | Force a provider: `openai`, `mistral`, or `gemini` (auto-detected otherwise) |
+| `OPENAI_API_ENDPOINT` | No | Override the OpenAI endpoint URL for any OpenAI-compatible server (e.g. Ollama, LM Studio) |
 
-### Plugin
+### 3. Install the plugin
 
-Copy `godot_addon/addons/vibe_plugin` into your Godot project under `addons/`, then enable it in **Project > Project Settings > Plugins**.
+1. Copy `godot_addon/addons/vibe_plugin` into your Godot project at `addons/vibe_plugin`.
+2. In Godot, open **Project > Project Settings > Plugins** and enable **Vibe Plugin**.
 
-The backend needs to be running on `localhost:8765` before using any of the plugin features.
+The backend must be running on `localhost:8765` before using any plugin features.
 
-## Test Project
+### Try it with the test project
 
-`vibe_test_project/` is a minimal Godot 4.4 project with the plugin pre-enabled and an `assets/` folder ready for generated images. Open it in Godot to try things out.
+`vibe_test_project/` is a minimal Godot 4.4 project with the plugin pre-enabled and an `assets/` folder ready for generated images. Open it in Godot to experiment without setting up your own project.
 
 ## Architecture
 
