@@ -1,2 +1,0 @@
-"""Independent leader implementation namespace."""
-

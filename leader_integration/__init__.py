@@ -1,2 +1,0 @@
-"""Independent live integration harness."""
-
